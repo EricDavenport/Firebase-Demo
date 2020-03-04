@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -23,7 +24,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       let loginViewController = loginViewSB.instantiateViewController(identifier: "LoginViewController") as? LoginViewController else { return }
     window = UIWindow(frame: UIScreen.main.bounds)
     window?.windowScene = windowScene
-    window?.rootViewController = loginViewController
+//    window?.rootViewController = loginViewController
+    if let _ = Auth.auth().currentUser { // a user is currently logged in, if not optional
+        UIViewController.showViewController(storyboardName: "MainView", viewControllerId: "MainTabBarController")
+    } else { // No looged in user
+        UIViewController.showViewController(storyboardName: "LoginView", viewControllerId: "LoginViewController")
+    }
     window?.makeKeyAndVisible()
   }
 
@@ -57,4 +63,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
