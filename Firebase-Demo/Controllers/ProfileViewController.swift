@@ -8,10 +8,11 @@
 
 import UIKit
 import FirebaseAuth
+import Kingfisher
 
 class ProfileViewController: UIViewController {
   
-  @IBOutlet weak var profileImage: UIImageView!
+  @IBOutlet weak var profileImageView: UIImageView!
   @IBOutlet weak var displayNameTextField: UITextField!
   @IBOutlet weak var emailLabel: UILabel!
   
@@ -24,7 +25,7 @@ class ProfileViewController: UIViewController {
   
   private var selectedImage: UIImage? {
     didSet {
-      profileImage.image = selectedImage
+      profileImageView.image = selectedImage
     }
   }
   
@@ -45,6 +46,7 @@ class ProfileViewController: UIViewController {
     }
     emailLabel.text = user.email
     displayNameTextField.text = user.displayName
+    profileImageView.kf.setImage(with: user.photoURL)
     //    user.displayName
     //    user.email
     //    user.phoneNumber
@@ -63,15 +65,38 @@ class ProfileViewController: UIViewController {
         return
     }
     
+    guard let user = Auth.auth().currentUser else { return }
+    
     // resize image before uploading to FireBase
-    let resizedImage = UIImage.resizeImage(originalImage: selectedImage, rect: profileImage.bounds)
+    let resizedImage = UIImage.resizeImage(originalImage: selectedImage, rect: profileImageView.bounds)
     
     print("oroginal image size: \(selectedImage.size)")
     print("resized image size: \(resizedImage.size)")
     
-    // TODO: call storageService.upload
-    storageService.uploadPhoto(image: resizedImage) { (result) in
-      // code here to add photoURL to the users PhotoURL property
+    // TODO: call ZrageService.upload
+    storageService.uploadPhoto(userId: user.uid, image: resizedImage) { (result) in
+      // code here to add photoURL to the users PhotoURL property then commit changes
+      switch result {
+      case .failure(let error):
+        DispatchQueue.main.async {
+          self.showAlert(title: "Error uploading photo", message: "\(error.localizedDescription)")
+        }
+      case .success(let url):
+        let request = Auth.auth().currentUser?.createProfileChangeRequest()
+        request?.displayName = displayName
+        request?.photoURL = url
+        request?.commitChanges(completion: { [unowned self](error) in
+          if let error = error {
+            DispatchQueue.main.async {
+              self.showAlert(title: "Error updating profile", message: "Error changing profile: \(error.localizedDescription).")
+            }
+          } else {
+            DispatchQueue.main.async {
+              self.showAlert(title: "Profile Updated", message: "Profile successfully updated")
+            }
+          }
+        })
+      }
     }
     
     let request = Auth.auth().currentUser?.createProfileChangeRequest()
@@ -108,6 +133,18 @@ class ProfileViewController: UIViewController {
     alertController.addAction(photoLibraryAction)
     alertController.addAction(cancelAction)
     present(alertController, animated: true)
+  }
+  
+  
+  @IBAction func signOutButtonPressed(_ sender: UIButton) {
+    do {
+      try Auth.auth().signOut()
+      UIViewController.showViewController(storyboardName: "LoginView", viewControllerId: "LoginViewController")
+    } catch {
+      DispatchQueue.main.async {
+        self.showAlert(title: "Error signing out", message: "\(error.localizedDescription).")
+      }
+    }
     
   }
   

@@ -57,7 +57,7 @@ extension SellItemViewController : UICollectionViewDelegateFlowLayout {
       // TODO: segue to CreateItemViewController
       let category = categories[indexPath.row]
       let mainViewSB = UIStoryboard(name: "MainView", bundle: nil)
-      let createItemsVC = mainViewSB.instantiateViewController(identifier: "MainView") { (coder) in
+      let createItemsVC = mainViewSB.instantiateViewController(identifier: "CreateItemViewController") { (coder) in
         return CreateItemViewController(coder: coder, category: category)
       }
       present(UINavigationController(rootViewController: createItemsVC), animated: true)

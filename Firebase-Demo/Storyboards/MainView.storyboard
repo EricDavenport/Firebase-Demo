@@ -98,6 +98,12 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="decimalPad"/>
                             </textField>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="5Op-9y-dWp">
+                                <rect key="frame" x="0.0" y="217" width="414" height="411.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="5Op-9y-dWp" secondAttribute="height" multiplier="1:1" id="UVW-2O-LQO"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -106,20 +112,24 @@
                             <constraint firstItem="dug-XA-S8p" firstAttribute="trailing" secondItem="HUV-bT-qwt" secondAttribute="trailing" constant="20" id="aaM-k1-PTB"/>
                             <constraint firstItem="G1e-gz-cZA" firstAttribute="top" secondItem="HUV-bT-qwt" secondAttribute="bottom" constant="20" id="d9z-m4-Lt8"/>
                             <constraint firstItem="dug-XA-S8p" firstAttribute="trailing" secondItem="G1e-gz-cZA" secondAttribute="trailing" constant="20" id="gD4-CZ-86n"/>
+                            <constraint firstItem="5Op-9y-dWp" firstAttribute="leading" secondItem="dug-XA-S8p" secondAttribute="leading" constant="0.01" id="gvy-lB-C2l"/>
+                            <constraint firstItem="5Op-9y-dWp" firstAttribute="trailing" secondItem="dug-XA-S8p" secondAttribute="trailing" constant="0.01" id="rQv-Ee-8q7"/>
                             <constraint firstItem="HUV-bT-qwt" firstAttribute="top" secondItem="dug-XA-S8p" secondAttribute="top" constant="20" id="wmi-4X-nnO"/>
+                            <constraint firstItem="5Op-9y-dWp" firstAttribute="top" secondItem="G1e-gz-cZA" secondAttribute="bottom" constant="20" id="xH9-hs-sta"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="dug-XA-S8p"/>
                     </view>
                     <navigationItem key="navigationItem" id="muR-d9-LxT">
                         <barButtonItem key="rightBarButtonItem" title="Sell" id="gIe-cS-stC">
                             <connections>
-                                <action selector="sellButtonPressed:" destination="ejB-zb-pA9" id="eQN-QJ-OS5"/>
+                                <action selector="postItem:" destination="ejB-zb-pA9" id="WpJ-yT-SAQ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="addNameTextField" destination="HUV-bT-qwt" id="ruO-iY-PvT"/>
-                        <outlet property="itemPriceTextfield" destination="G1e-gz-cZA" id="IV1-i4-vN2"/>
+                        <outlet property="itemImageView" destination="5Op-9y-dWp" id="SzK-bY-2op"/>
+                        <outlet property="itemNameTextField" destination="HUV-bT-qwt" id="Lqo-C9-OKc"/>
+                        <outlet property="itemPriceTextField" destination="G1e-gz-cZA" id="axc-NC-CNH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cBu-dn-wr2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -165,19 +175,25 @@
                                 <rect key="frame" x="158" y="433" width="98" height="30"/>
                                 <state key="normal" title="Update Profile"/>
                                 <connections>
-                                    <action selector="updateProfile:" destination="NgM-1H-FGu" eventType="touchUpInside" id="Qry-nZ-ip7"/>
                                     <action selector="updateProfileButtonPressed:" destination="NgM-1H-FGu" eventType="touchUpInside" id="JOs-Xx-xEl"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tFP-Fa-UN7">
-                                <rect key="frame" x="275" y="122" width="44" height="44"/>
+                                <rect key="frame" x="275" y="122.5" width="44" height="43"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="PPX-Pq-Yrh"/>
                                     <constraint firstAttribute="width" constant="44" id="q5A-aK-LI9"/>
                                 </constraints>
-                                <state key="normal" image="pencil.circle.fill" catalog="system"/>
+                                <state key="normal" backgroundImage="pencil.circle.fill" catalog="system"/>
                                 <connections>
                                     <action selector="editProfilePhotoButtonPressed:" destination="NgM-1H-FGu" eventType="touchUpInside" id="e8v-9O-BFu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QM1-ti-y6T">
+                                <rect key="frame" x="177" y="493" width="60" height="30"/>
+                                <state key="normal" title="Sign Out"/>
+                                <connections>
+                                    <action selector="signOutButtonPressed:" destination="NgM-1H-FGu" eventType="touchUpInside" id="H5r-aJ-HNn"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -189,6 +205,8 @@
                             <constraint firstItem="tFP-Fa-UN7" firstAttribute="centerY" secondItem="5jc-GC-fiI" secondAttribute="centerY" id="IVC-Tv-xHI"/>
                             <constraint firstItem="IzQ-Bd-xSK" firstAttribute="centerX" secondItem="FIZ-kr-XgD" secondAttribute="centerX" id="KGM-y9-0vb"/>
                             <constraint firstItem="IzQ-Bd-xSK" firstAttribute="centerY" secondItem="FIZ-kr-XgD" secondAttribute="centerY" id="Lqy-uU-ocd"/>
+                            <constraint firstItem="QM1-ti-y6T" firstAttribute="top" secondItem="IzQ-Bd-xSK" secondAttribute="bottom" constant="30" id="OPd-BU-Lpu"/>
+                            <constraint firstItem="QM1-ti-y6T" firstAttribute="centerX" secondItem="FIZ-kr-XgD" secondAttribute="centerX" id="Q1T-fF-fds"/>
                             <constraint firstItem="XIW-SB-jKr" firstAttribute="top" secondItem="Zaz-xf-0Zi" secondAttribute="bottom" constant="20" id="UbD-JA-WqY"/>
                             <constraint firstItem="tFP-Fa-UN7" firstAttribute="leading" secondItem="5jc-GC-fiI" secondAttribute="trailing" constant="8" id="VJ9-Tb-hXL"/>
                             <constraint firstItem="5jc-GC-fiI" firstAttribute="centerX" secondItem="FIZ-kr-XgD" secondAttribute="centerX" id="Vz3-Gx-W5p"/>
@@ -202,7 +220,7 @@
                     <connections>
                         <outlet property="displayNameTextField" destination="Zaz-xf-0Zi" id="a4B-nX-jRF"/>
                         <outlet property="emailLabel" destination="XIW-SB-jKr" id="Aeg-6c-ifp"/>
-                        <outlet property="profileImage" destination="5jc-GC-fiI" id="Psh-L2-s95"/>
+                        <outlet property="profileImageView" destination="5jc-GC-fiI" id="Psh-L2-s95"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g1a-Qy-nfk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

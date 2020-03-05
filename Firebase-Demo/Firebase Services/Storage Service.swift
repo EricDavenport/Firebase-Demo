@@ -26,7 +26,7 @@ class StorageService {
   public func uploadPhoto(userId: String? = nil, itemId: String? = nil, image: UIImage, completion: @escaping (Result<URL, Error>) -> ()) {
     // MARK: Question -
     /*
-     Why didnt we pass in a user in ordr to asign userId to photo or itemid to user?
+     Why didnt we pass in a user in order to asign userId to photo or itemid to user?
      */
     
     // 1. COnvert UIImage to data because this is the object we are posting to Fireba Storage
