@@ -22,6 +22,9 @@
 		5819478A241008DF00920B2B /* ItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 58194789241008DF00920B2B /* ItemCell.xib */; };
 		5819478D24100B0200920B2B /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5819478C24100B0200920B2B /* UIImage+Extensions.swift */; };
 		5819478F24100DD700920B2B /* Storage Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5819478E24100DD700920B2B /* Storage Service.swift */; };
+		585A8A2324196A7A004D8A61 /* ItemDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585A8A2224196A7A004D8A61 /* ItemDetailController.swift */; };
+		585A8A252419739E004D8A61 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585A8A242419739E004D8A61 /* HeaderView.swift */; };
+		585A8A2724198F7C004D8A61 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 585A8A2624198F7C004D8A61 /* Comment.swift */; };
 		586EEE0524096E4E00D7B939 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 586EEE0424096E4D00D7B939 /* GoogleService-Info.plist */; };
 		588890A024097541007CC901 /* AuthenticationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5888909F24097541007CC901 /* AuthenticationSession.swift */; };
 		58A08658240D66C700490436 /* UIViewController+Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A08657240D66C700490436 /* UIViewController+Navigation.swift */; };
@@ -69,6 +72,9 @@
 		58194789241008DF00920B2B /* ItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ItemCell.xib; sourceTree = "<group>"; };
 		5819478C24100B0200920B2B /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		5819478E24100DD700920B2B /* Storage Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Storage Service.swift"; sourceTree = "<group>"; };
+		585A8A2224196A7A004D8A61 /* ItemDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailController.swift; sourceTree = "<group>"; };
+		585A8A242419739E004D8A61 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		585A8A2624198F7C004D8A61 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		586EEE0424096E4D00D7B939 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5888909F24097541007CC901 /* AuthenticationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationSession.swift; sourceTree = "<group>"; };
 		58A08657240D66C700490436 /* UIViewController+Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Navigation.swift"; sourceTree = "<group>"; };
@@ -193,6 +199,7 @@
 				58194785240FFEC100920B2B /* ItemCell.swift */,
 				57845AF224092DDC00F35651 /* DesignableView.swift */,
 				58C96288240D7577006377EC /* CategoryCell.swift */,
+				585A8A242419739E004D8A61 /* HeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -206,6 +213,7 @@
 				58A0865D240D679C00490436 /* SellItemViewController.swift */,
 				58A0865F240D67AE00490436 /* ItemFeedViewController.swift */,
 				58A08661240D67D200490436 /* MainTabBarController.swift */,
+				585A8A2224196A7A004D8A61 /* ItemDetailController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -243,6 +251,7 @@
 			children = (
 				58C9628B240D776E006377EC /* Category.swift */,
 				58C9628D240D7B99006377EC /* Item.swift */,
+				585A8A2624198F7C004D8A61 /* Comment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -419,17 +428,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				58C96290240D7E8C006377EC /* DatabaseService.swift in Sources */,
+				585A8A2724198F7C004D8A61 /* Comment.swift in Sources */,
 				57845AD124092D4300F35651 /* LoginViewController.swift in Sources */,
 				58194787240FFEC100920B2B /* ItemCell.swift in Sources */,
 				58A0865E240D679C00490436 /* SellItemViewController.swift in Sources */,
 				58A08662240D67D200490436 /* MainTabBarController.swift in Sources */,
 				58C96289240D7577006377EC /* CategoryCell.swift in Sources */,
 				5819478F24100DD700920B2B /* Storage Service.swift in Sources */,
+				585A8A252419739E004D8A61 /* HeaderView.swift in Sources */,
 				58C9628E240D7B99006377EC /* Item.swift in Sources */,
 				58C96287240D6F4B006377EC /* UIViewControllers+Alerts.swift in Sources */,
 				58A08658240D66C700490436 /* UIViewController+Navigation.swift in Sources */,
 				57845ACD24092D4300F35651 /* AppDelegate.swift in Sources */,
 				58A08660240D67AE00490436 /* ItemFeedViewController.swift in Sources */,
+				585A8A2324196A7A004D8A61 /* ItemDetailController.swift in Sources */,
 				57845AF124092DBB00F35651 /* GradientView.swift in Sources */,
 				57845AF324092DDC00F35651 /* DesignableView.swift in Sources */,
 				588890A024097541007CC901 /* AuthenticationSession.swift in Sources */,

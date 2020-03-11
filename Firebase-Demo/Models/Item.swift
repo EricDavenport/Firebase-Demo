@@ -16,16 +16,18 @@ struct Item {
   let sellerName : String
   let sellerId : String
   let categoryName: String
+  let imageURL : String
 }
 
 extension Item {
-    init(_ dictionary: [String: Any]) {
-        self.itemName = dictionary["itemName"] as? String ?? "No item name"
-        self.price = dictionary["price"] as? Double ?? 0.00
-        self.itemId = dictionary["itemID"] as? String ?? "No Item ID"
-        self.listedDate = dictionary["listedDate"] as? Date ?? Date()
-        self.sellerName = dictionary["sellerName"] as? String ?? "No seller name"
-        self.sellerId = dictionary["sellerID"] as? String ?? "No seller ID"
-        self.categoryName = dictionary["categoryName"] as? String ?? "No category name"
-    }
+  init(_ dictionary: [String: Any]) {
+    self.itemName = dictionary["itemName"] as? String ?? "No item name"
+    self.price = dictionary["price"] as? Double ?? 0.00
+    self.itemId = dictionary["itemID"] as? String ?? "No Item ID"
+    self.listedDate = dictionary["listedDate"] as? Date ?? Date()
+    self.sellerName = dictionary["sellerName"] as? String ?? "No seller name"
+    self.sellerId = dictionary["sellerID"] as? String ?? "No seller ID"
+    self.categoryName = dictionary["categoryName"] as? String ?? "No category name"
+    self.imageURL = dictionary["imageURL"] as? String ?? "no image url"
+  }
 }

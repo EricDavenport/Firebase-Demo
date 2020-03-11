@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 enum AccountState {
   case existingUser
@@ -26,7 +27,8 @@ class LoginViewController: UIViewController {
   private var accountState: AccountState = .existingUser
   
   private var authSession = AuthenticationSession()
-
+  private var db = DatabaseService()
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     clearErrorLabel()
@@ -45,7 +47,7 @@ class LoginViewController: UIViewController {
   
   // make additional func - easier to debug if neccessary
   private func continueLoginFlow(email: String, password: String) {
-    if accountState == .existingUser{
+    if accountState == .existingUser {
       authSession.signExistingUser(email: email, password: password) { (result) in
         switch result {
         case .failure(let error):
@@ -56,6 +58,7 @@ class LoginViewController: UIViewController {
           print("error: \(error)")
         case .success(let authDataResult):
           DispatchQueue.main.async {
+            self.navigateToMainView()
             self.errorLabel.textColor = .systemGreen
             self.errorLabel.text = "Welcome bak user \(authDataResult.user.email ?? "")"
           }
@@ -63,24 +66,38 @@ class LoginViewController: UIViewController {
       }
     } else {
       authSession.createNewUser(email: email, password: password) { (result) in
-          switch result {
-          case .failure(let error):
-            DispatchQueue.main.async {
-              self.errorLabel.text = "Error: \(error.localizedDescription)"
-              self.errorLabel.textColor = .systemRed
-            }
-          case .success(let authDataResult):
-            DispatchQueue.main.async {
-              self.errorLabel.text = "Hope you enjoy our app experience. Email used \(authDataResult.user.email ?? "" )"
-              self.errorLabel.textColor = .systemGreen
-            }
+        switch result {
+        case .failure(let error):
+          DispatchQueue.main.async {
+            self.errorLabel.text = "Error: \(error.localizedDescription)"
+            self.errorLabel.textColor = .systemRed
           }
+        case .success(let authDataResult):
+          // create a database user only from a new authenticated account
+          self.createDatabaseUser(authDataResult: authDataResult)
+          
         }
       }
     }
+  }
+  
+  private func createDatabaseUser(authDataResult: AuthDataResult) {
+    db.createDatabaseUser(authDataResult: authDataResult) { [weak self] (result) in
+      switch result {
+      case .failure(let error):
+        DispatchQueue.main.async {
+          self?.showAlert(title: "Accout error", message: "\(error.localizedDescription)")
+        }
+      case .success:
+        DispatchQueue.main.async {
+          self?.navigateToMainView()
+        }
+      }
+    }
+  }
   
   private func navigateToMainView() {
-      UIViewController.showViewController(storyboardName: "MainView", viewControllerId: "MainTabBarController")
+    UIViewController.showViewController(storyboardName: "MainView", viewControllerId: "MainTabBarController")
   }
   
   private func clearErrorLabel() {
@@ -108,6 +125,6 @@ class LoginViewController: UIViewController {
       }, completion: nil)
     }
   }
-
+  
 }
 

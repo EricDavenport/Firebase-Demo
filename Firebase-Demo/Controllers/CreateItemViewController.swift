@@ -9,6 +9,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore   // data base /// firestore
 
 class CreateItemViewController: UIViewController {
   
@@ -18,6 +19,8 @@ class CreateItemViewController: UIViewController {
   
   private var category: Category
   private let dbService = DatabaseService()
+  
+  private let storageService = StorageService()
   
   private lazy var imagePickerController : UIImagePickerController = {
     let picker = UIImagePickerController()
@@ -33,7 +36,7 @@ class CreateItemViewController: UIViewController {
   
   private var selectedImage: UIImage? {
     didSet {
-        itemImageView.image = selectedImage
+      itemImageView.image = selectedImage
     }
   }
   
@@ -49,7 +52,6 @@ class CreateItemViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     navigationItem.title = category.name
-    
     itemImageView.isUserInteractionEnabled = true
     itemImageView.addGestureRecognizer(longPressGesture)
     
@@ -72,15 +74,16 @@ class CreateItemViewController: UIViewController {
     alertController.addAction(photoLibrary)
     alertController.addAction(cancelAction)
     present(alertController, animated: true)
-
+    
   }
   
-  @IBAction func postItem(_ sender: UIBarButtonItem) {
+  @IBAction func sellButtonPressed(_ sender: UIBarButtonItem) {
     guard let itemName = itemNameTextField.text,
       !itemName.isEmpty,
       let priceText = itemPriceTextField.text,
       !priceText.isEmpty,
-      let price = Double(priceText) else {
+      let price = Double(priceText),
+      let selectedImage = selectedImage else {
         showAlert(title: "Missing Fields", message: "All fields are required.")
         return
     }
@@ -88,22 +91,53 @@ class CreateItemViewController: UIViewController {
       showAlert(title: "Incomplete Profile", message: "Please go to profile to complete your settings")
       return
     }
+    
+    let resizedImage = UIImage.resizeImage(originalImage: selectedImage, rect: itemImageView.bounds)
+    
     dbService.createItem(itemName: itemName, price: price, category: category, displayName: displayName) { [weak self] (result) in
       switch result {
       case .failure(let error):
         DispatchQueue.main.async {
           self?.showAlert(title: "Error creating item", message: "Something went wrong: \(error.localizedDescription)")
         }
-      case .success:
-        DispatchQueue.main.async {
-          self?.showAlert(title: nil, message: "Successfully listed your item: \(itemName)")
-        }
+      case .success(let documentID):
+        // TODO: Upload photo to storage
+        self?.uploadPhoto(image: resizedImage, documentID: documentID)
       }
     }
     
     //        dismiss(animated: true)
   }
   
+  private func uploadPhoto(image: UIImage, documentID: String) {
+    storageService.uploadPhoto(itemId: documentID, image: image) { [weak self] (result) in
+      switch result {
+      case .failure(let error):
+        DispatchQueue.main.async {
+          self?.showAlert(title: "Error uploading photo", message: "\(error.localizedDescription).")
+        }
+      case.success(let url):
+        self?.updateItemImageURL(url, documentId: documentID)
+      }
+    }
+  }
+  
+  private func updateItemImageURL(_ url: URL, documentId: String) {
+    // update an existing document on firebase
+    Firestore.firestore().collection(DatabaseService.itemsCollection).document(documentId).updateData(["imageURL" : url.absoluteString]) { [weak self] (error) in
+      if let error = error {
+        DispatchQueue.main.async {
+          self?.showAlert(title: "Fail to update item", message: "\(error.localizedDescription)")
+        }
+      } else {
+        // everything went okay
+        print("all went well with the update")
+        DispatchQueue.main.async {
+          self?.dismiss(animated: true)
+        }
+      }
+    }
+  }
   
 }
 

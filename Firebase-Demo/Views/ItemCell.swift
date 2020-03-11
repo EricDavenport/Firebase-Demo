@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class ItemCell: UITableViewCell {
 
@@ -20,7 +21,8 @@ class ItemCell: UITableViewCell {
   @IBOutlet weak var priceLabel: UILabel!
   
   public func configureCell(_ item: Item) {
-    // TODO: steup image, import kingFisher, install kingfisher pods
+    // steup image, import kingFisher, install kingfisher pods
+    itemImageView.kf.setImage(with: URL(string: item.imageURL))
     itemNameLabel.text = item.itemName
     sellerNameLabel.text = "@\(item.sellerName)"
     dateLabel.text = item.listedDate.description
