@@ -16,6 +16,7 @@ class ItemDetailController: UIViewController {
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var containerBottomConstraint: NSLayoutConstraint!
   @IBOutlet weak var commentTextField: UITextField!
+  @IBOutlet weak var favoriteButton: UIBarButtonItem!
   
   private var item: Item
   private var originalValueForContraint: CGFloat = 0
@@ -27,6 +28,16 @@ class ItemDetailController: UIViewController {
     gesture.addTarget(self, action: #selector(dismissKeyboard))
     return gesture
   }()
+  
+  private var isFavorite = false {
+    didSet {
+      if isFavorite {
+        favoriteButton.image = UIImage(systemName: "heart.fill")
+      } else {
+        favoriteButton.image = UIImage(systemName: "heart")
+      }
+    }
+  }
   
   private var listener: ListenerRegistration?
   
@@ -55,12 +66,16 @@ class ItemDetailController: UIViewController {
   }
   override func viewDidLoad() {
     super.viewDidLoad()
+    updateUI()
     navigationItem.title = item.itemName
     commentTextField.delegate = self
     tableView.dataSource = self
     tableView.tableHeaderView = HeaderView(imageURL: item.imageURL)
     originalValueForContraint = containerBottomConstraint.constant
     view.addGestureRecognizer(tapGesture)
+    navigationItem.largeTitleDisplayMode = .never
+    
+    // Refactor code (helper funtion) in viewDidLoad, we shpuld always strive for less code in or viewDidLoad
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -74,7 +89,8 @@ class ItemDetailController: UIViewController {
       } else if let snapshot = snapshot {
         // create comments using dictionary initializer from the comment model
         let comments = snapshot.documents.map { Comment($0.data()) }
-        self?.comments = comments
+        // sort by date
+        self?.comments = comments.sorted { $0.commentDate.dateValue() < $1.commentDate.dateValue()}
       }
     })
   }
@@ -82,6 +98,26 @@ class ItemDetailController: UIViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(true)
     unregisterKeyboardNotifications()
+  }
+  
+  private func updateUI() {
+    // check if item is a favorite and update heart icon accordingly
+    databaseService.isItemInFavorites(item: item) { [weak self] (result) in
+      switch result {
+      case .failure(let error):
+        DispatchQueue.main.async {
+          self?.showAlert(title: "Try again", message: error.localizedDescription)
+        }
+      case .success(let success):
+        if success { // true
+          self?.isFavorite = true
+          print(self?.isFavorite)
+        } else {
+          self?.isFavorite = false
+          print(self?.isFavorite)
+        }
+      }
+    }
   }
   
   @IBAction func sendButtonPressed(_ sender: UIButton) {
@@ -97,6 +133,44 @@ class ItemDetailController: UIViewController {
     postComment(text: commentText)
     
   }
+  
+  @IBAction func favoriteButtonPressed(_ sender: UIBarButtonItem) {
+    
+    if isFavorite {  // remove from favorites
+      databaseService.removeFromFavorites(item: item) { [weak self]  (result) in
+        switch result {
+        case .failure(let error):
+          DispatchQueue.main.async {
+            self?.showAlert(title: "failed to remove favorite", message: error.localizedDescription)
+          }
+        case .success:
+          DispatchQueue.main.async {
+            self?.showAlert(title: "Favorite removed", message: nil)
+            self?.isFavorite = false
+          }
+          
+        }
+      }
+    } else {  // not favorited - add to favoriteds
+      databaseService.addToFavorites(item: item) { [weak self] (result) in
+        switch result {
+        case .failure(let error):
+          DispatchQueue.main.async {
+            self?.showAlert(title: "Favoriting Error", message: error.localizedDescription)
+          }
+        case .success:
+          DispatchQueue.main.async {
+            self?.showAlert(title: "Item favorited", message: nil)
+            self?.isFavorite = true
+          }
+        }
+      }
+    }
+    
+    
+
+  }
+  
   
   private func postComment(text: String) {
     databaseService.postComment(item: item, comment: text) { [weak self] (result) in
