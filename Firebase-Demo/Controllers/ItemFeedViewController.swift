@@ -66,6 +66,7 @@ extension ItemFeedViewController: UITableViewDataSource {
       fatalError("Failed to dequeue as itemCell")
     }
     let item = items[indexPath.row]
+    cell.delegate = self
     cell.configureCell(for: item)
     return cell
   }
@@ -108,4 +109,15 @@ extension ItemFeedViewController: UITableViewDataSource {
     navigationController?.pushViewController(detailVC, animated: true)
   }
   
+}
+
+// step 2 - delegating object
+extension ItemFeedViewController : ItemCellDelegate {
+  func didSelectSellerName(_ itemCell: ItemCell, item: Item) {
+    let storyboard = UIStoryboard(name: "MainView", bundle: nil)
+    let sellerItemsController = storyboard.instantiateViewController(identifier: "SellerItemsController") { (coder) in
+      return SellerItemsController(coder: coder, item: item)
+    }
+    navigationController?.pushViewController(sellerItemsController, animated: true)
+  }
 }

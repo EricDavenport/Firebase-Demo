@@ -9,13 +9,23 @@
 import UIKit
 import Kingfisher
 
+protocol ItemCellDelegate : AnyObject {
+  func didSelectSellerName(_ itemCell: ItemCell, item: Item)
+}
+
 class ItemCell: UITableViewCell {
+  
+  weak var delegate: ItemCellDelegate?
 
   @IBOutlet weak var itemImageView: UIImageView!
   @IBOutlet weak var itemNameLabel: UILabel!
   @IBOutlet weak var sellerNameLabel: UILabel!
   @IBOutlet weak var dateLabel: UILabel!
   @IBOutlet weak var priceLabel: UILabel!
+  
+  private var currentItem : Item!
+  
+  
 
   private lazy var tapGesture : UITapGestureRecognizer = {
     let gesture = UITapGestureRecognizer()
@@ -24,7 +34,8 @@ class ItemCell: UITableViewCell {
   }()
   
   @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
-    print("was tapped")
+    delegate?.didSelectSellerName(self, item: currentItem)
+    
   }
   
   override func layoutSubviews() {   // gets called anytime the view itself will be called to top view controller
@@ -37,6 +48,7 @@ class ItemCell: UITableViewCell {
 
   
   public func configureCell(for item: Item) {
+    currentItem = item
     updateUI(imageURL: item.imageURL, itemName: item.itemName, sellerName: item.sellerName, date: item.listedDate, price: item.price)
   }
   

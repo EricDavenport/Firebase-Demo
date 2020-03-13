@@ -40,6 +40,7 @@
 		58C9628E240D7B99006377EC /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C9628D240D7B99006377EC /* Item.swift */; };
 		58C96290240D7E8C006377EC /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C9628F240D7E8C006377EC /* DatabaseService.swift */; };
 		58F20734241BD4C700853087 /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F20733241BD4C700853087 /* Favorites.swift */; };
+		58F20736241BE5F000853087 /* SellerItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58F20735241BE5F000853087 /* SellerItemsController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		58C9628D240D7B99006377EC /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		58C9628F240D7E8C006377EC /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		58F20733241BD4C700853087 /* Favorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
+		58F20735241BE5F000853087 /* SellerItemsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerItemsController.swift; sourceTree = "<group>"; };
 		9E5FBDAA36FC6E2D27580621 /* Pods_Firebase_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Firebase_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0EB02AD7708901951DF86CA /* Pods-Firebase-DemoTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Firebase-DemoTests.release.xcconfig"; path = "Target Support Files/Pods-Firebase-DemoTests/Pods-Firebase-DemoTests.release.xcconfig"; sourceTree = "<group>"; };
 		D6300CB36D78392EE4C5EE5E /* Pods_Firebase_DemoTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Firebase_DemoTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -216,6 +218,7 @@
 				58A0865F240D67AE00490436 /* ItemFeedViewController.swift */,
 				58A08661240D67D200490436 /* MainTabBarController.swift */,
 				585A8A2224196A7A004D8A61 /* ItemDetailController.swift */,
+				58F20735241BE5F000853087 /* SellerItemsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				57845ACD24092D4300F35651 /* AppDelegate.swift in Sources */,
 				58A08660240D67AE00490436 /* ItemFeedViewController.swift in Sources */,
 				585A8A2324196A7A004D8A61 /* ItemDetailController.swift in Sources */,
+				58F20736241BE5F000853087 /* SellerItemsController.swift in Sources */,
 				57845AF124092DBB00F35651 /* GradientView.swift in Sources */,
 				57845AF324092DDC00F35651 /* DesignableView.swift in Sources */,
 				588890A024097541007CC901 /* AuthenticationSession.swift in Sources */,
