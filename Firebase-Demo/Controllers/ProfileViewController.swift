@@ -45,7 +45,7 @@ class ProfileViewController: UIViewController {
   
   // favorites data
   // TODO: create favorites model
-  private var favorites = [String]() {
+  private var favorites = [Favorite]() {
     didSet {
       DispatchQueue.main.async {
         self.tableView.reloadData()
@@ -63,9 +63,6 @@ class ProfileViewController: UIViewController {
   
   private var refreshControl: UIRefreshControl!
   
-  
-  // myItems data
-  
   override func viewDidLoad() {
     super.viewDidLoad()
     displayNameTextField.delegate = self
@@ -73,11 +70,15 @@ class ProfileViewController: UIViewController {
     tableView.delegate = self
     tableView.register(UINib(nibName: "ItemCell", bundle: nil), forCellReuseIdentifier: "itemCell")
     updateUI()
-    fetchItems()
     refreshControl = UIRefreshControl()
     refreshControl.addTarget(self, action: #selector(fetchItems), for: .valueChanged)
     tableView.refreshControl = refreshControl
     
+  }
+  
+  private func loadData() {
+    fetchFavorites()
+    fetchItems()
   }
   
   @objc private func fetchItems() {
@@ -100,6 +101,25 @@ class ProfileViewController: UIViewController {
       }
     }
   }
+  
+  @objc private func fetchFavorites() {
+    
+    databaseService.fetchFavorites { [weak self] (result) in
+      switch result {
+      case  .failure(let error):
+        DispatchQueue.main.async {
+          self?.showAlert(title: "Failed fetching fsavorites", message: error.localizedDescription)
+        }
+      case .success(let favs):
+        self?.favorites = favs
+      }
+      DispatchQueue.main.async {
+        self?.refreshControl.endRefreshing()
+      }
+    }
+    
+  }
+
   
   private func updateUI() {
     guard let user = Auth.auth().currentUser else {
@@ -276,10 +296,10 @@ extension ProfileViewController : UITableViewDataSource {
     
     if viewState == .myItems {
       let item = myItems[indexPath.row]
-      cell.configureCell(item)
+      cell.configureCell(for: item)
     } else {
       let favorite = favorites[indexPath.row]
-      //      cell.configureCell(favorite)
+      cell.configureCell(for: favorite)
     }
     
     return cell

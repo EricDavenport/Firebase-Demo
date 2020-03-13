@@ -111,10 +111,8 @@ class ItemDetailController: UIViewController {
       case .success(let success):
         if success { // true
           self?.isFavorite = true
-          print(self?.isFavorite)
         } else {
           self?.isFavorite = false
-          print(self?.isFavorite)
         }
       }
     }

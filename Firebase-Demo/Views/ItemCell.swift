@@ -11,22 +11,46 @@ import Kingfisher
 
 class ItemCell: UITableViewCell {
 
-  
   @IBOutlet weak var itemImageView: UIImageView!
-  
   @IBOutlet weak var itemNameLabel: UILabel!
   @IBOutlet weak var sellerNameLabel: UILabel!
   @IBOutlet weak var dateLabel: UILabel!
-  
   @IBOutlet weak var priceLabel: UILabel!
+
+  private lazy var tapGesture : UITapGestureRecognizer = {
+    let gesture = UITapGestureRecognizer()
+    gesture.addTarget(self, action: #selector(handleTap(_:)))
+    return gesture
+  }()
   
-  public func configureCell(_ item: Item) {
-    // steup image, import kingFisher, install kingfisher pods
-    itemImageView.kf.setImage(with: URL(string: item.imageURL))
-    itemNameLabel.text = item.itemName
-    sellerNameLabel.text = "@\(item.sellerName)"
-    dateLabel.text = item.listedDate.description
-    let price = String(format: "%.2f", item.price)
+  @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
+    print("was tapped")
+  }
+  
+  override func layoutSubviews() {   // gets called anytime the view itself will be called to top view controller
+    super.layoutSubviews()
+    sellerNameLabel.textColor = .systemOrange
+    sellerNameLabel.addGestureRecognizer(tapGesture)
+    sellerNameLabel.isUserInteractionEnabled = true
+  }
+  
+
+  
+  public func configureCell(for item: Item) {
+    updateUI(imageURL: item.imageURL, itemName: item.itemName, sellerName: item.sellerName, date: item.listedDate, price: item.price)
+  }
+  
+  
+  public func configureCell(for favorite: Favorite) {
+    updateUI(imageURL: favorite.imageURL, itemName: favorite.itemName, sellerName: favorite.sellerName, date: favorite.favoritedDate.dateValue(), price: favorite.price)
+  }
+  
+  private func updateUI(imageURL: String, itemName: String, sellerName: String, date: Date, price: Double ) {
+    itemImageView.kf.setImage(with: URL(string: imageURL))
+    itemNameLabel.text = itemName
+    sellerNameLabel.text = "@\(sellerName)"
+    dateLabel.text = date.description
+    let price = String(format: "%.2f", price)
     priceLabel.text = "$\(price)"
   }
   

@@ -66,7 +66,7 @@ extension ItemFeedViewController: UITableViewDataSource {
       fatalError("Failed to dequeue as itemCell")
     }
     let item = items[indexPath.row]
-    cell.configureCell(item)
+    cell.configureCell(for: item)
     return cell
   }
   
